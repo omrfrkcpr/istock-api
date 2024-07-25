@@ -9,6 +9,7 @@ const router = require("express").Router();
 /* ---------------------------------------- */
 
 const product = require("../controllers/product");
+const idValidation = require("../middlewares/idValidation");
 const permissions = require("../middlewares/permissions");
 
 // URL: /products
@@ -27,6 +28,7 @@ router.route('/:id')
 
 router
   .route("/(:id)?")
+  .all(idValidation)
   .get(permissions.isStaff, product.read)
   .post(product.create)
   .put(permissions.isAdmin, product.update)
