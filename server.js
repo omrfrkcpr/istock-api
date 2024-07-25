@@ -31,9 +31,6 @@ dbConnection();
 // Accept JSON:
 app.use(express.json());
 
-// Call static uploadFile:
-// app.use("/upload", express.static("./upload"));
-
 // Check Authentication:
 app.use(require("./src/middlewares/authentication"));
 
@@ -73,4 +70,4 @@ app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`));
 
 /* -------------------------------------------- */
 // Syncronization (must be in commentLine):
-// require('./src/helpers/sync')() // !!! It clear database.
+// require('./src/helpers/sync')() // !!! It clears database.
