@@ -7,7 +7,6 @@
 
 const router = require("express").Router();
 /* --------------------------------------------- */
-// routes/document:
 
 // URL: /documents
 
