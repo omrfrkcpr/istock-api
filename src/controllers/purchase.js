@@ -1,10 +1,16 @@
 "use strict";
-
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*         Purchase Controller        */
-/* ---------------------------------- */
-
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Purchase Controller
+/* 
+    Stokta 0 ürün var
+    a ürününden 20 adet aldık stokta ürün 20
+    a ürününden 80 adet daha aldık stokta 100
+    a üründünden 10 adet aldık ürün 110
+    10 alınan ürün satın alamaişlemini sildik ürün 100
+    20 adet aldığımız ürün esasen 15 miş düzenleme yaptım ürün 95 
+*/
 const Purchase = require("../models/purchase");
 const Product = require("../models/product");
 
@@ -50,12 +56,14 @@ module.exports = {
             }
         */
 
-    // take userId from req.user
+    // userId verisini req.user'dan al
     req.body.userId = req.user._id;
+
+    // Create
 
     const data = await Purchase.create(req.body);
 
-    // After purchase update quantity (+)
+    // Satınalma sonrası quantity bilgisini göncelle yani artış olmalı
     const updateProduct = await Product.updateOne(
       { _id: data.productId },
       { $inc: { quantity: +data.quantity } }
@@ -63,7 +71,6 @@ module.exports = {
 
     res.status(201).send({
       error: false,
-      message: "New Purchase completed successfully!",
       data,
     });
   },
@@ -122,11 +129,11 @@ module.exports = {
         */
 
     if (req.body?.quantity) {
-      // get current purchase data
+      // mevcut adet bilgisini al:
       const currentPurchase = await Purchase.findOne({ _id: req.params.id });
-      // find difference
+      // farkı bul:
       const difference = req.body.quantity - currentPurchase.quantity;
-      // update the product quantity with the difference amount (+)
+      // farkı Product'a güncelle
       const updateProduct = await Product.updateOne(
         { _id: currentPurchase.productId },
         { $inc: { quantity: +difference } }
@@ -140,7 +147,6 @@ module.exports = {
 
     res.status(202).send({
       error: false,
-      message: "Purchase updated successfully!",
       data,
       new: await Purchase.findOne({ _id: req.params.id }),
     });
@@ -152,13 +158,13 @@ module.exports = {
             #swagger.summary = "Delete Purchase"
         */
 
-    // get current purchase data
+    // mevcut adet bilgisini al:
     const currentPurchase = await Purchase.findOne({ _id: req.params.id });
 
     // Delete
     const data = await Purchase.deleteOne({ _id: req.params.id });
 
-    // After delete, update product quantity (-)
+    // Adedi Product'dan eksilt:
     const updateProduct = await Product.updateOne(
       { _id: currentPurchase.productId },
       { $inc: { quantity: -currentPurchase.quantity } }
@@ -166,9 +172,6 @@ module.exports = {
 
     res.status(data.deletedCount ? 204 : 404).send({
       error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Purchase successfully deleted!"
-        : "Purchase not found!",
       data,
     });
   },

@@ -15,7 +15,7 @@ const permissions = require("../middlewares/permissions");
 
 router
   .route("/(:id)?")
-  .all(idValidation)
+  // .all(idValidation)
   .post(permissions.isAdmin, firm.create)
   .get(permissions.isStaff, firm.read)
   .put(permissions.isAdmin, firm.update)

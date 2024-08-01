@@ -1,9 +1,8 @@
 "use strict";
-
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*           Auth Controller          */
-/* ---------------------------------- */
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Auth Controller:
 
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
@@ -21,7 +20,7 @@ module.exports = {
                 required: true,
                 schema: {
                     "username": "test",
-                    "password": "Test@123",
+                    "password": "1234",
                 }
             }
         */
@@ -61,7 +60,6 @@ module.exports = {
 
           res.send({
             error: false,
-            message: "You are successfully logged id!",
             token: tokenData.token,
             bearer: { accessToken, refreshToken },
             user,

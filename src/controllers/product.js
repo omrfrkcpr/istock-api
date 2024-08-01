@@ -1,9 +1,8 @@
 "use strict";
-
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*         Product Controller         */
-/* ---------------------------------- */
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Product Controller
 
 const Product = require("../models/product");
 
@@ -49,7 +48,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "New Product successfully created!",
       data,
     });
   },
@@ -109,7 +107,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "Product successfully updated!",
       new: await Product.findOne({ _id: req.params.id }),
       data,
     });
@@ -123,11 +120,8 @@ module.exports = {
 
     const data = await Product.deleteOne({ _id: req.params.id });
 
-    res.status(data.deletedCount ? 204 : 404).send({
-      error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Product successfully deleted!"
-        : "Product not found!",
+    res.status(200).send({
+      error: !data.deleteCount,
       data,
     });
   },

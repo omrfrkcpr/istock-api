@@ -1,9 +1,9 @@
 "use strict";
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Brand Controller
 
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*           Brand Controller         */
-/* ---------------------------------- */
 const Brand = require("../models/brand");
 
 module.exports = {
@@ -48,7 +48,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "New Brand successfully created!",
       data,
     });
   },
@@ -97,7 +96,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "Brand successfully updated",
       new: await Brand.findOne({ _id: req.params.id }),
       data,
     });
@@ -109,13 +107,10 @@ module.exports = {
             #swagger.summary = "Delete Brand"
         */
 
-    const data = await Brand.daleteOne({ _id: req.params.id });
+    const data = await Brand.deleteOne({ _id: req.params.id });
 
-    res.status(204).send({
-      error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Brand successfully deleted"
-        : "Brand not found!",
+    res.status(200).send({
+      error: !data.deleteCount,
       data,
     });
   },

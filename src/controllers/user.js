@@ -1,9 +1,8 @@
 "use strict";
-
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*           User Controller          */
-/* ---------------------------------- */
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// User Controller:
 
 const User = require("../models/user");
 const Token = require("../models/token");
@@ -25,8 +24,9 @@ module.exports = {
             `
         */
 
-    // User can see only his data
-    // Staff and Admin can see every user's data
+    // Sadece kendi kayıtlarını görebilir:
+    // Çalışanlarımız ve Admin tük kullanıcıları görebilir
+    // Şirket politikası na göre isStaff kaldırılabilir
     const customFilters =
       req.user?.isAdmin || req.user?.isStaff ? {} : { _id: req.user._id };
 
@@ -56,20 +56,23 @@ module.exports = {
           }
       */
 
-    // By new account => admin/staff = false
+    // Yeni kayıtlarda admin/staff = false
     req.body.isStaff = false;
     req.body.isAdmin = false;
 
+    console.log("create before");
     const data = await User.create(req.body);
+    console.log("create after");
 
-    const tokenData = await Token.create({
-      userId: data._id,
-      token: passwordEncrypt(data._id + Date.now()),
-    });
+    /* AUTO LOGIN *
+        const tokenData = await Token.create({
+            userId: data._id,
+            token: passwordEncrypt(data._id + Date.now())
+        })
+        /* AUTO LOGIN */
 
     res.status(201).send({
       error: false,
-      message: "New account successfully created!",
       token: tokenData.token,
       data,
     });
@@ -83,8 +86,8 @@ module.exports = {
 
     //
 
-    // Users can see only his data
-    // Staff and Admin can see every user's data
+    // Sadece kendi kayıtını görebilir:
+    // Çalışanlarımız ve Admin tük kullanıcıları görebilir
     const customFilters =
       req.user?.isAdmin || req.user?.isStaff ? {} : { _id: req.user._id };
 
@@ -114,14 +117,11 @@ module.exports = {
         */
     console.log("--->>", req.params.id, req.user?.isAdmin);
 
-    // User can update only his data
-    // Admin can update , whatever he wants
-    const customFilters = req.user?.isAdmin
-      ? { _id: req.params.id }
-      : { _id: req.user._id };
-    // const customFilters = { _id: req.params.id };
+    // Sadece kendi kaydını güncelleyebilir:
+    //const customFilters = req.user?.isAdmin ? { _id: req.params.id } : { _id: req.user._id }
+    const customFilters = { _id: req.params.id };
 
-    // By updating, the status of admin/staff can not be changed
+    // Yeni kayıtlarda admin/staff durumunu değiştiremez:
     if (!req.user?.isAdmin) {
       delete req.body.isStaff;
       delete req.body.isAdmin;
@@ -133,7 +133,6 @@ module.exports = {
 
     res.status(202).send({
       error: false,
-      message: "Account informations successfully updated!",
       data,
       new: await User.findOne(customFilters),
     });
@@ -145,20 +144,19 @@ module.exports = {
             #swagger.summary = "Delete User"
         */
 
-    // Permission middleware allows only admin to delete user accounts. Users can not delete their accounts. Only admin can do it
+    // Permission tarafında permissions.isAdmin kontrolü yapıldığı için burda gerek kalmadı.
 
     if (req.params.id !== req.user._id) {
       const data = await User.deleteOne({ _id: req.params.id });
+      const count = data?.deletedCount ?? 0;
 
-      res.status(data.deletedCount ? 204 : 404).send({
-        error: !data.deletedCount,
-        message: data.deletedCount
-          ? "Account successfully deleted!"
-          : "Account not found!",
+      console.log("delete >> ", count);
+      res.status(count > 0 ? 204 : 404).send({
+        error: count !== 0,
         data,
       });
     } else {
-      // Admin cannot delete itself
+      // Admin kendini silemez.
       res.errorStatusCode = 403;
       throw new Error("You can not remove your account.");
     }

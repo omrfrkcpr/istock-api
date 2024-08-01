@@ -1,9 +1,9 @@
 "use strict";
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Category Controller
 
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*         Category Controller        */
-/* ---------------------------------- */
 const Category = require("../models/category");
 
 module.exports = {
@@ -48,7 +48,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "New Category successfully created!",
       data,
     });
   },
@@ -97,7 +96,6 @@ module.exports = {
 
     res.status(200).send({
       error: false,
-      message: "Category successfully updated!",
       new: await Category.findOne({ _id: req.params.id }),
       data,
     });
@@ -111,11 +109,8 @@ module.exports = {
 
     const data = await Category.deleteOne({ _id: req.params.id });
 
-    res.status(data.deletedCount ? 204 : 404).send({
-      error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Category successfully deleted!"
-        : "Category not found!",
+    res.status(200).send({
+      error: !data.deleteCount,
       data,
     });
   },

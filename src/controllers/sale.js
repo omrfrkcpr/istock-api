@@ -1,10 +1,16 @@
 "use strict";
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Sale Controller
 
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*           Sale Controller          */
-/* ---------------------------------- */
-
+/* 
+    Stokta 100 ürün
+    müşteri 10 ader aldı kalan ürün 90
+    10 ürün müşteri 5 ni geri ver iade etti kalan 95
+    diğer müşteri 5 ürün aldı kalan 90
+    bu müşteri yanlışlık olmuş bu satışı sildik kalan 95
+*/
 const Sale = require("../models/sale");
 const Product = require("../models/product");
 
@@ -49,16 +55,17 @@ module.exports = {
             }
         */
 
-    // get userId from req.user
+    // userId verisini req.user'dan al
     req.body.userId = req.user._id;
 
     const productData = await Product.findOne({ _id: req.body.productId });
-
-    // if quantity of product is equal or greater than requested amount, than perform it!
+    // mevcut stok miktarı gelen satım isteği miktarından büyük veya eşitse işlem yapılabilir
     if (productData.quantity >= req.body.quantity) {
+      // Create
+
       const data = await Sale.create(req.body);
 
-      // After Sale, update product quantity (-)
+      // Satınalma sonrası quantity bilgisini göncelle yani artış olmalı
       await Product.updateOne(
         { _id: data.productId },
         { $inc: { quantity: -data.quantity } }
@@ -66,7 +73,6 @@ module.exports = {
 
       res.status(201).send({
         error: false,
-        message: "New Sale completed successfully!",
         data,
       });
     } else {
@@ -86,6 +92,8 @@ module.exports = {
     // console.log("read run");
 
     if (req.params.id) {
+      // Single
+
       const data = await Sale.findOne({ _id: req.params.id }).populate([
         { path: "userId", select: "username email" },
         "brandId",
@@ -98,6 +106,7 @@ module.exports = {
       });
     } else {
       // All
+
       const data = await res.getModelList(Sale, {}, [
         { path: "userId", select: "username email" },
         "brandId",
@@ -126,16 +135,17 @@ module.exports = {
         */
 
     if (req.body?.quantity) {
-      // get current sale data
+      // mevcut adet bilgisini al:
       const currentSale = await Sale.findOne({ _id: req.params.id });
-      // find difference
+      // farkı bul:
       const difference = req.body.quantity - currentSale.quantity;
-      // update the quantity of product with the difference amount (-)
+      // farkı Product'a güncelle
       const updateProduct = await Product.updateOne(
         { _id: currentSale.productId },
         { $inc: { quantity: -difference } }
       );
 
+      // Update işlemi olmamışsai hata verdir. hata verince sistem devam etmeyecektir.
       if (updateProduct.modifiedCount == 0) {
         res.errorStatusCode = 422;
         throw new Error("There is not enough product-quantity for this sale.");
@@ -149,7 +159,6 @@ module.exports = {
 
     res.status(202).send({
       error: false,
-      message: "Sale successfully updated!",
       data,
       new: await Sale.findOne({ _id: req.params.id }),
     });
@@ -161,13 +170,13 @@ module.exports = {
             #swagger.summary = "Delete Sale"
         */
 
-    // get current sale data
+    // mevcut adet bilgisini al:
     const currentSale = await Sale.findOne({ _id: req.params.id });
 
     // Delete
     const data = await Sale.deleteOne({ _id: req.params.id });
 
-    // update the quantity of product (+)
+    // Adedi Product'dan eksilt:
     const updateProduct = await Product.updateOne(
       { _id: currentSale.productId },
       { $inc: { quantity: +currentSale.quantity } }
@@ -175,9 +184,6 @@ module.exports = {
 
     res.status(data.deletedCount ? 204 : 404).send({
       error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Sale successfully deleted!"
-        : "Sale not found!",
       data,
     });
   },

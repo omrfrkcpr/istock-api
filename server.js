@@ -7,6 +7,7 @@
 
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 /* -------------------------------------------- */
 
@@ -27,6 +28,14 @@ dbConnection();
 
 /* -------------------------------------------- */
 // Middlewares:
+
+const corsOptions = {
+  origin: [process.env.CLIENT_URL],
+  methods: ["GET", "POST", "PUT", "PATCH", "HEAD", "DELETE"],
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // Accept JSON:
 app.use(express.json());
@@ -70,4 +79,4 @@ app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`));
 
 /* -------------------------------------------- */
 // Syncronization (must be in commentLine):
-// require('./src/helpers/sync')() // !!! It clears database.
+// require("./src/helpers/sync")(); // !!! It clears database.

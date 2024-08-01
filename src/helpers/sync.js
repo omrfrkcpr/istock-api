@@ -78,7 +78,7 @@ module.exports = async function () {
     _id: "65343222b67e9681f937f108",
     name: "Under Armour",
     image:
-      "https://1000logos.net/wp-content/uploads/2017/08/Under-Armour-Logo.png",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2viFxbPs8yzPv_xZjjqSQwA6R36wEI_kbXA&s",
   });
   await Brand.create({
     _id: "65343222b67e9681f937f109",
@@ -101,7 +101,7 @@ module.exports = async function () {
   await Brand.create({
     _id: "65343222b67e9681f937f112",
     name: "Sony",
-    image: "https://upload.wikimedia.org/wikipedia/commons/0/07/Sony_logo.png",
+    image: "https://brandslex.de/img/logos/xl/s/logo-sony-01.png",
   });
   await Brand.create({
     _id: "65343222b67e9681f937f113",
@@ -113,7 +113,7 @@ module.exports = async function () {
     _id: "65343222b67e9681f937f114",
     name: "Panasonic",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e9/Panasonic_logo.png",
+      "https://kreafolk.com/cdn/shop/articles/panasonic-logo-design-history-and-evolution-kreafolk_e22aef50-03d3-44ad-9c51-839d87728434.jpg?v=1717725026&width=2048",
   });
 
   /* Category */
@@ -148,7 +148,7 @@ module.exports = async function () {
     name: "Amazon",
     phone: "1-888-280-4331",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+      "https://m.media-amazon.com/images/G/03/gc/designs/livepreview/blue_hero_logo_noto_email_v2016_de-main._CB467020238_.png",
     address: "410 Terry Ave N, Seattle, WA 98109, USA",
   });
   await Firm.create({
@@ -164,14 +164,15 @@ module.exports = async function () {
     name: "Alibaba",
     phone: "+86-571-8502-2088",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/d/db/Alibaba_logo.svg",
+      "https://www.designenlassen.de/blog/wp-content/uploads/2024/02/227dd295-99df-4f13-86b8-767b17c69c04-1024x387.png",
     address: "969 West Wen Yi Road, Yu Hang District, Hangzhou, China",
   });
   await Firm.create({
     _id: "65343222b67e9681f937f304",
     name: "eBay",
     phone: "1-866-540-3229",
-    image: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Ebay_logo.svg",
+    image:
+      "https://www.designtagebuch.de/wp-content/uploads/mediathek//2012/09/ebay-logo-1-1100x814.jpg",
     address: "2025 Hamilton Ave, San Jose, CA 95125, USA",
   });
   await Firm.create({
@@ -179,15 +180,14 @@ module.exports = async function () {
     name: "Best Buy",
     phone: "1-888-237-8289",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/0/0a/Best_Buy_Logo.svg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE9k6YmgQlXvlSeFmeOUybDeeBq7SvwGYZfQ&s",
     address: "7601 Penn Ave S, Richfield, MN 55423, USA",
   });
   await Firm.create({
     _id: "65343222b67e9681f937f306",
     name: "Target",
     phone: "1-800-440-0680",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/92/Target_logo.svg",
+    image: "https://cdn.worldvectorlogo.com/logos/target-7.svg",
     address: "1000 Nicollet Mall, Minneapolis, MN 55403, USA",
   });
   await Firm.create({
@@ -195,7 +195,7 @@ module.exports = async function () {
     name: "Costco",
     phone: "1-800-774-2678",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Costco_Wholesale_logo_2010-10-26.svg",
+      "https://logowik.com/content/uploads/images/costco-wholesale6513.logowik.com.webp",
     address: "999 Lake Dr, Issaquah, WA 98027, USA",
   });
 
@@ -244,6 +244,7 @@ module.exports = async function () {
   });
 
   /* Purchase */
+  const Purchase = require("../models/purchase");
   await Purchase.deleteMany(); // !!! Clear collection.
   await Purchase.create({
     _id: "65343222b67e9681f937f513",
@@ -301,6 +302,7 @@ module.exports = async function () {
   });
 
   /* Sale */
+  const Sale = require("../models/sale");
   await Sale.deleteMany(); // !!! Clear collection.
   await Sale.create({
     _id: "65343222b67e9681f937f614",

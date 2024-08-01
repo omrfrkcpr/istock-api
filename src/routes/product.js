@@ -28,7 +28,7 @@ router.route('/:id')
 
 router
   .route("/(:id)?")
-  .all(idValidation)
+  // .all(idValidation)
   .get(permissions.isStaff, product.read)
   .post(product.create)
   .put(permissions.isAdmin, product.update)

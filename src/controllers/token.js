@@ -1,9 +1,8 @@
 "use strict";
-
-/* ---------------------------------- */
-/*             ISTOCK API             */
-/*          Token Controller          */
-/* ---------------------------------- */
+/* -------------------------------------------------------
+    NODEJS EXPRESS | ISTOCK API
+------------------------------------------------------- */
+// Token Controller:
 
 const Token = require("../models/token");
 
@@ -31,7 +30,6 @@ module.exports = {
 
     res.status(201).send({
       error: false,
-      message: "New Token successfully created!",
       data,
     });
   },
@@ -60,7 +58,6 @@ module.exports = {
 
     res.status(202).send({
       error: false,
-      message: "Token successfully updated!",
       data,
       new: await Token.findOne({ _id: req.params.id }),
     });
@@ -75,9 +72,6 @@ module.exports = {
 
     res.status(data.deletedCount ? 204 : 404).send({
       error: !data.deletedCount,
-      message: data.deletedCount
-        ? "Token successfully deleted!"
-        : "Token not found!",
       data,
     });
   },
